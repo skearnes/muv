@@ -24,5 +24,31 @@ def spread(d, t):
     t : float
         Distance threshold.
     """
-    p = np.mean(np.any(d < t, axis=1))
-    return p
+    s = np.mean(np.any(d < t, axis=1))
+    return s
+
+
+def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None):
+    """
+    Calculate the sum of spreads across a range of distance thresholds.
+
+    Parameters
+    ----------
+    d : ndarray
+        Distance matrix with compounds from set A on first axis.
+    coeff : float
+        Coefficient used to rescale distance thresholds.
+    min_t : float, optional (default 0)
+        Minimum distance threshold (before rescaling).
+    max_t : float, optional (default 3)
+        Maximum distance threshold (before rescaling).
+    step : float, optional
+        Step size for determining values to sample between min_t and max_t.
+        If not provided, defaults to max_t / 500.
+    """
+    if step is None:
+        step = max_t / 500.
+    n_steps = int((max_t - min_t) / step)
+    thresholds = coeff * np.linspace(min_t, max_t, n_steps)
+    ss = np.sum([spread(d, t) for t in thresholds])
+    return ss
