@@ -30,7 +30,8 @@ def spread(d, t):
 
 def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None):
     """
-    Calculate the sum of spreads across a range of distance thresholds.
+    Calculate the sum of spreads (or spread differences) across a range of
+    distance thresholds.
 
     Parameters
     ----------
