@@ -15,7 +15,7 @@ __license__ = "3-clause BSD"
 
 from rdkit import Chem
 from rdkit.Chem import AllChem
-from rdkit.Chem.ChiralType import CHI_TETRAHEDRAL_CW, CHI_TETRAHEDRAL_CCW
+from rdkit.Chem import ChiralType
 
 
 class Descriptors(object):
@@ -55,8 +55,8 @@ class Descriptors(object):
         # number of chiral centers
         n_chiral = 0
         for atom in mol.GetAtoms():
-            if (atom.GetChiralTag() == CHI_TETRAHEDRAL_CW or
-                    atom.GetChiralTag() == CHI_TETRAHEDRAL_CCW):
+            if (atom.GetChiralTag() == ChiralType.CHI_TETRAHEDRAL_CW or
+                    atom.GetChiralTag() == ChiralType.CHI_TETRAHEDRAL_CCW):
                 n_chiral += 1
         d.append(n_chiral)
 
