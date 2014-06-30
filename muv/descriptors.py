@@ -13,6 +13,8 @@ __author__ = "Steven Kearnes"
 __copyright__ = "Copyright 2014, Stanford University"
 __license__ = "3-clause BSD"
 
+import numpy as np
+
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit.Chem import ChiralType
@@ -63,6 +65,8 @@ class Descriptors(object):
         # number of ring systems (not the number of rings)
         n_ring_systems = self.count_ring_systems(mol)
         d.append(n_ring_systems)
+
+        return np.asarray(d)
 
     @staticmethod
     def atom_counts(mol):
