@@ -4,13 +4,20 @@ Miscellaneous utilities.
 import numpy as np
 
 
+class MUV(object):
+    """
+    Generate maximum unbiased validation (MUV) datasets for virtual
+    screening as described in Rohrer and Baumann, J. Chem. Inf. Model.
+    2009, 49, 169-184.
+    """
+    
+
 def kennard_stone(d, k):
     """
     Use the Kennard-Stone algorithm to select k maximally separated
     examples from a dataset.
 
-    See R. W. Kennard and L. A. Stone (1969): Computer Aided Design of
-    Experiments, Technometrics, 11:1, 137-148.
+    See Kennard and Stone, Technometrics 1969, 11, 137-148.
 
     Algorithm
     ---------
