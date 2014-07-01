@@ -38,6 +38,71 @@ class EmbeddingFilter(object):
         return keep
 
 
+class PropertyFilter(object):
+    """
+    Remove compounds from a dataset that have properties outside an
+    acceptable range.
+
+    Parameters
+    ----------
+    min_value : float
+        Minimum property value.
+    max_value : float
+        Maximum property value.
+    prop : str, optional
+        Molecular property to extract using Mol.GetProp.
+    allow_min : bool, optional (default True)
+        Whether to allow a molecular property to equal min_value.
+    allow_max : bool, optional (default True)
+        Whether to allow a molecular property to equal max_value.
+    """
+    def __init__(self, min_value, max_value, prop=None, allow_min=True,
+                 allow_max=True):
+        self.min_value = min_value
+        self.max_value = max_value
+        self.prop = prop
+        self.allow_min = allow_min
+        self.allow_max = allow_max
+
+    def get_prop(self, mol):
+        """
+        Extract the relevant property from the molecule. Subclasses can
+        override this method to return properties not accessible through
+        Mol.GetProp.
+
+        Parameters
+        ----------
+        mol : Mol
+            Molecule.
+        """
+        if self.prop is not None:
+            return mol.GetProp(self.prop)
+        else:
+            raise NotImplementedError
+
+    def filter(self, mols):
+        """
+        Filter a set of molecules.
+
+        Parameters
+        ----------
+        mols : iterable
+            Molecules.
+        """
+        keep = []
+        for mol in mols:
+            prop = self.get_prop(mol)
+            if prop < self.min_value or prop > self.max_value:
+                continue
+            if not self.allow_min and prop == self.min_value:
+                continue
+            if not self.allow_max and prop == self.max_value:
+                continue
+            keep.append(mol)
+        keep = np.asarray(keep)
+        return keep
+
+
 class CompoundFilter(object):
     """
     Base class for removing specific compounds from a dataset.
