@@ -45,26 +45,26 @@ class PropertyFilter(object):
 
     Parameters
     ----------
-    min_value : float
+    min_value : float, optional
         Minimum property value.
-    max_value : float
+    max_value : float, optional
         Maximum property value.
-    prop : str, optional
-        Molecular property to extract using Mol.GetProp.
     allow_min : bool, optional (default True)
         Whether to allow a molecular property to equal min_value.
     allow_max : bool, optional (default True)
         Whether to allow a molecular property to equal max_value.
     """
-    def __init__(self, min_value, max_value, prop=None, allow_min=True,
+    def __init__(self, min_value=None, max_value=None, allow_min=True,
                  allow_max=True):
+        if min_value is None and max_value is None:
+            raise ValueError("At least one of min_value or max_value must " +
+                             "provided.")
         self.min_value = min_value
         self.max_value = max_value
-        self.prop = prop
         self.allow_min = allow_min
         self.allow_max = allow_max
 
-    def get_prop(self, mol):
+    def get_prop(self, mol, prop=None):
         """
         Extract the relevant property from the molecule. Subclasses can
         override this method to return properties not accessible through
@@ -74,9 +74,11 @@ class PropertyFilter(object):
         ----------
         mol : Mol
             Molecule.
+        prop : str, optional
+            Molecular property to extract using Mol.GetProp.
         """
-        if self.prop is not None:
-            return mol.GetProp(self.prop)
+        if prop is not None:
+            return mol.GetProp(prop)
         else:
             raise NotImplementedError
 
@@ -92,12 +94,16 @@ class PropertyFilter(object):
         keep = []
         for mol in mols:
             prop = self.get_prop(mol)
-            if prop < self.min_value or prop > self.max_value:
-                continue
-            if not self.allow_min and prop == self.min_value:
-                continue
-            if not self.allow_max and prop == self.max_value:
-                continue
+            if self.min_value is not None:
+                if self.allow_min and prop < self.min_value:
+                    continue
+                elif not self.allow_min and prop <= self.min_value:
+                    continue
+            if self.max_value is not None:
+                if self.allow_max and prop > self.max_value:
+                    continue
+                elif not self.allow_max and prop >= self.max_value:
+                    continue
             keep.append(mol)
         keep = np.asarray(keep)
         return keep
