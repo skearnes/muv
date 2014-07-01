@@ -9,6 +9,9 @@ def kennard_stone(d, k):
     Use the Kennard-Stone algorithm to select k maximally separated
     examples from a dataset.
 
+    See R. W. Kennard & L. A. Stone (1969): Computer Aided Design of
+    Experiments, Technometrics, 11:1, 137-148.
+
     Algorithm
     ---------
     1. Choose the two examples separated by the largest distance. In the
