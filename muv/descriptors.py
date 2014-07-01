@@ -1,12 +1,5 @@
 """
-MUV simple descriptors:
-* Atom counts: all, heavy, B, Br, C, Cl, F, I, N, O, P, S
-* Number of hydrogen bond acceptors / donors
-* cLogP
-* Number of chiral centers
-* Number of ring systems
-
-Descriptors are calculated with the RDKit.
+Calculate MUV descriptors with the RDKit.
 """
 
 __author__ = "Steven Kearnes"
@@ -20,11 +13,27 @@ from rdkit.Chem import AllChem
 from rdkit.Chem import ChiralType
 
 
-class Descriptors(object):
+class MUVDescriptors(object):
+    """
+    Calculate MUV descriptors:
+    * Atom counts: all, heavy, B, Br, C, Cl, F, I, N, O, P, S
+    * Number of hydrogen bond acceptors / donors
+    * cLogP
+    * Number of chiral centers
+    * Number of ring systems
+    """
     def __call__(self, mol):
         return self.get_descriptors(mol)
 
     def get_descriptors(self, mol):
+        """
+        Calculate MUV descriptors for a molecule.
+
+        Parameters
+        ----------
+        mol : Mol
+            Molecule.
+        """
         d = []
 
         # prep

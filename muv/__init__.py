@@ -10,7 +10,7 @@ class MUV(object):
     screening as described in Rohrer and Baumann, J. Chem. Inf. Model.
     2009, 49, 169-184.
     """
-    
+
 
 def kennard_stone(d, k):
     """
