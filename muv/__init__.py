@@ -3,6 +3,8 @@ Miscellaneous utilities.
 """
 import numpy as np
 
+from muv.descriptors import MUVDescriptors
+
 
 class MUV(object):
     """
@@ -10,6 +12,43 @@ class MUV(object):
     screening as described in Rohrer and Baumann, J. Chem. Inf. Model.
     2009, 49, 169-184.
     """
+    def create_dataset(self, actives, decoys, n_actives=30,
+                       n_decoys_per_active=500):
+        """
+        Create a MUV dataset.
+
+        Parameters
+        ----------
+        actives : iterable
+            Potential actives.
+        decoys : iterable
+            Potential decoys.
+        """
+
+        # calculate descriptors
+        ad = self.calculate_descriptors(actives)
+        dd = self.calculate_descriptors(decoys)
+
+        # apply filters
+
+        # select actives and decoys
+
+
+    def calculate_descriptors(self, mols):
+        """
+        Calculate MUV descriptors for molecules.
+
+        Parameters
+        ----------
+        mols : iterable
+            Molecules.
+        """
+        describer = MUVDescriptors()
+        x = []
+        for mol in mols:
+            x.append(describer(mol))
+        x = np.asarray(x)
+        return x
 
 
 def kennard_stone(d, k):

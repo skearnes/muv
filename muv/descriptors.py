@@ -23,9 +23,9 @@ class MUVDescriptors(object):
     * Number of ring systems
     """
     def __call__(self, mol):
-        return self.get_descriptors(mol)
+        return self.calculate_descriptors(mol)
 
-    def get_descriptors(self, mol):
+    def calculate_descriptors(self, mol):
         """
         Calculate MUV descriptors for a molecule.
 
