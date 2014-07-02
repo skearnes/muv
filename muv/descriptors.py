@@ -38,6 +38,8 @@ class MUVDescriptors(object):
 
         # prep
         mol = Chem.AddHs(mol)
+        mol = Chem.AssignStereochemistry(mol, cleanIt=True, force=True,
+                                         flagPossibleStereoCenters=True)
 
         # atom counts
         atoms = {'B': 5, 'Br': 35, 'C': 6, 'Cl': 17, 'F': 9, 'I': 53, 'N': 7,
