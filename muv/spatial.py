@@ -7,7 +7,7 @@ __copyright__ = "Copyright 2014, Stanford University"
 __license__ = "3-clause BSD"
 
 import numpy as np
-from scipy.spatial.distance import cdist
+from scipy.spatial.distance import cdist, is_valid_dm
 
 
 def distance(a, b):
@@ -31,6 +31,9 @@ def spread(d, t):
     and B, calculate the fraction of compounds in set A that are closer
     than t to any compound in set B.
 
+    If the distance matrix is symmetric and has zero diagonals, the
+    diagonal values are ignored.
+
     Parameters
     ----------
     d : ndarray
@@ -38,12 +41,17 @@ def spread(d, t):
     t : float
         Distance threshold.
     """
+
+    # test for symmetric distance matrix
+    # diagonal values should be ignored
+    if is_valid_dm(d):
+        d = np.copy(d)
+        d[np.diag_indices_from(d)] = np.inf
     s = np.mean(np.any(d < t, axis=1))
     return s
 
 
-def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None,
-                   symmetric=False):
+def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None):
     """
     Calculate the sum of spreads (or spread differences) across a range of
     distance thresholds.
@@ -65,19 +73,14 @@ def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None,
         Distance matrix. If provided, the spread will be calculated for this
         distance matrix and subtracted from the spread of d at each distance
         threshold.
-    symmetric : bool, optional (default False)
-        Whether the distance matrix d is symmetric, and should have its
-        diagonal values ignored during spread calculation.
     """
-    if symmetric:
-        d = np.copy(d)
-        d[np.diag_indices_from(d)] = np.inf
     if step is None:
         step = max_t / 500.
     n_steps = int((max_t - min_t) / step)
     thresholds = coeff * np.linspace(min_t, max_t, n_steps)
     if diff is not None:
-        ss = np.sum([spread(d, t) - spread(diff, t) for t in thresholds])
+        ss = np.sum([spread(d, t) - spread(diff, t)
+                     for t in thresholds])
     else:
         ss = np.sum([spread(d, t) for t in thresholds])
     return ss
