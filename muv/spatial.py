@@ -7,6 +7,20 @@ __copyright__ = "Copyright 2014, Stanford University"
 __license__ = "3-clause BSD"
 
 import numpy as np
+from scipy.spatial.distance import cdist
+
+
+def distance(a, b):
+    """
+    Calculate distances between examples in two datasets.
+
+    Parameters
+    ----------
+    a, b : ndarray
+        Descriptor datasets with examples on the first axis and descriptors
+        on the second axis.
+    """
+    return cdist(a, b)
 
 
 def spread(d, t):
