@@ -28,7 +28,8 @@ def spread(d, t):
     return s
 
 
-def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None):
+def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None,
+                   symmetric=False):
     """
     Calculate the sum of spreads (or spread differences) across a range of
     distance thresholds.
@@ -46,11 +47,17 @@ def sum_of_spreads(d, coeff, min_t=0, max_t=3, step=None, diff=None):
     step : float, optional
         Step size for determining values to sample between min_t and max_t.
         If not provided, defaults to max_t / 500.
-    diff : ndarray
+    diff : ndarray, optional
         Distance matrix. If provided, the spread will be calculated for this
         distance matrix and subtracted from the spread of d at each distance
         threshold.
+    symmetric : bool, optional (default False)
+        Whether the distance matrix d is symmetric, and should have its
+        diagonal values ignored during spread calculation.
     """
+    if symmetric:
+        d = np.copy(d)
+        d[np.diag_indices_from(d)] = np.inf
     if step is None:
         step = max_t / 500.
     n_steps = int((max_t - min_t) / step)
