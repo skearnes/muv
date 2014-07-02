@@ -12,7 +12,7 @@ from scipy.spatial.distance import cdist, is_valid_dm
 
 def distance(a, b):
     """
-    Calculate distances between examples in two datasets.
+    Calculate pairwise distances between examples in two datasets.
 
     Parameters
     ----------
